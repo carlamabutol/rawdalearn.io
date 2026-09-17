@@ -1,10 +1,14 @@
 (function () {
   "use strict";
 
-  const characters = Array.from(document.querySelectorAll(".character"));
-  const teachers = characters.filter((c) => c.classList.contains("teacher"));
-  const students = characters.filter((c) => c.classList.contains("student"));
-  const confettiLayer = document.getElementById("confettiLayer");
+  const ROW_REVEAL_DELAY = 1800; // ms the answer stays up before the row resets and the next teacher's turn begins
+  const instructions = document.getElementById("instructions");
+
+  const rows = Array.from(document.querySelectorAll(".dialogue-row")).map((section) => ({
+    section,
+    teacher: section.querySelector(".character.teacher"),
+    student: section.querySelector(".character.student"),
+  }));
 
   function setPhoto(button, active) {
     const photo = button.querySelector(".char-photo");
@@ -12,70 +16,17 @@
     photo.src = active ? photo.dataset.active : photo.dataset.standby;
   }
 
-  function closeBubble(button) {
-    const bubble = document.getElementById(button.getAttribute("aria-controls"));
-    if (bubble) bubble.classList.remove("show");
-    button.setAttribute("aria-expanded", "false");
-    setPhoto(button, false);
-  }
-
   function openBubble(button) {
     const bubble = document.getElementById(button.getAttribute("aria-controls"));
     if (bubble) bubble.classList.add("show");
     button.setAttribute("aria-expanded", "true");
-    setPhoto(button, true);
   }
 
-  function isOpen(button) {
-    return button.getAttribute("aria-expanded") === "true";
+  function closeBubble(button) {
+    const bubble = document.getElementById(button.getAttribute("aria-controls"));
+    if (bubble) bubble.classList.remove("show");
+    button.setAttribute("aria-expanded", "false");
   }
-
-  function toggleCharacter(button) {
-    const group = button.classList.contains("teacher") ? teachers : students;
-    const wasOpen = isOpen(button);
-
-    // only one teacher (and, separately, one student) is ever mid-turn at a time
-    group.forEach((other) => {
-      if (other !== button) closeBubble(other);
-    });
-
-    if (wasOpen) {
-      closeBubble(button);
-      return;
-    }
-
-    openBubble(button);
-
-    if (button.classList.contains("teacher")) {
-      const partnerId = button.getAttribute("data-partner");
-      const partner = partnerId ? document.getElementById(partnerId) : null;
-      if (partner) partner.classList.remove("pulse");
-    }
-
-    if (button.classList.contains("student")) {
-      celebrate(button);
-    }
-  }
-
-  characters.forEach((button) => {
-    button.addEventListener("click", () => toggleCharacter(button));
-  });
-
-  document.addEventListener("click", (event) => {
-    if (!event.target.closest(".char-slot")) {
-      characters.forEach(closeBubble);
-    }
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      characters.forEach(closeBubble);
-    }
-  });
-
-  // gentle nudge: pulse the first teacher on load to invite interaction
-  const firstTeacher = document.querySelector(".character.teacher");
-  if (firstTeacher) firstTeacher.classList.add("pulse");
 
   function celebrate(button) {
     const rect = button.getBoundingClientRect();
@@ -91,4 +42,61 @@
       piece.addEventListener("animationend", () => piece.remove());
     }
   }
+
+  const confettiLayer = document.getElementById("confettiLayer");
+
+  function beginTeacherTurn(index) {
+    const row = rows[index];
+    if (!row) {
+      if (instructions) instructions.textContent = "أحسنت! لقد أنهيت الدرس كاملاً 🎉";
+      return;
+    }
+    row.section.classList.add("active-row");
+    setPhoto(row.teacher, true); // pre-set to the asking pose before any click
+    row.teacher.disabled = false;
+    row.teacher.classList.add("pulse");
+    if (instructions) instructions.textContent = "اضغط على المعلم لتسمع السؤال 🌟";
+
+    row.teacher.addEventListener(
+      "click",
+      () => {
+        row.teacher.disabled = true;
+        row.teacher.classList.remove("pulse");
+        openBubble(row.teacher);
+        beginStudentTurn(index);
+      },
+      { once: true }
+    );
+  }
+
+  function beginStudentTurn(index) {
+    const row = rows[index];
+    row.student.disabled = false;
+    row.student.classList.add("pulse");
+    if (instructions) instructions.textContent = "اضغط على الطالب لتعرف الإجابة 🌟";
+
+    row.student.addEventListener(
+      "click",
+      () => {
+        row.student.disabled = true;
+        row.student.classList.remove("pulse");
+        setPhoto(row.student, true);
+        openBubble(row.student);
+        celebrate(row.student);
+        if (instructions) instructions.textContent = "أحسنت! 👏";
+
+        window.setTimeout(() => {
+          closeBubble(row.teacher);
+          closeBubble(row.student);
+          setPhoto(row.teacher, false);
+          setPhoto(row.student, false);
+          row.section.classList.remove("active-row");
+          beginTeacherTurn(index + 1);
+        }, ROW_REVEAL_DELAY);
+      },
+      { once: true }
+    );
+  }
+
+  beginTeacherTurn(0);
 })();

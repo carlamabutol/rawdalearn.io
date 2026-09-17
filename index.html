@@ -43,7 +43,7 @@
     </div>
   </header>
 
-  <p class="instructions">اضغط على المعلم لتسمع السؤال، ثم اضغط على الطالب لتعرف الإجابة 🌟</p>
+  <p class="instructions" id="instructions">اضغط على المعلم لتسمع السؤال، ثم اضغط على الطالب لتعرف الإجابة 🌟</p>
 
   <main class="dialogue-list">
 
@@ -52,7 +52,7 @@
         <div class="bubble bubble-question" id="bubble-q1">مَنْ رَبُّكَ؟</div>
         <button class="character teacher" type="button" aria-expanded="false" aria-controls="bubble-q1" data-partner="1-student">
           <span class="char-avatar" aria-hidden="true">
-            <img class="char-photo" src="assets/teacher_standby.png" data-standby="assets/teacher_standby.png" data-active="assets/teacher_asking.png" alt="">
+            <img class="char-photo" src="assets/teacher_asking.png" data-standby="assets/teacher_standby.png" data-active="assets/teacher_asking.png" alt="">
           </span>
           <span class="char-label">المعلم</span>
         </button>
@@ -60,7 +60,7 @@
 
       <div class="char-slot student-slot">
         <div class="bubble bubble-answer" id="bubble-a1">رَبِّي اللهُ عَزَّ وَجَلَّ</div>
-        <button class="character student" type="button" aria-expanded="false" aria-controls="bubble-a1" id="1-student">
+        <button class="character student" type="button" aria-expanded="false" aria-controls="bubble-a1" id="1-student" disabled>
           <span class="char-avatar" aria-hidden="true">
             <img class="char-photo" src="assets/student_listening.png" data-standby="assets/student_listening.png" data-active="assets/student_answering.png" alt="">
           </span>
@@ -72,7 +72,7 @@
     <section class="dialogue-row" data-row="2">
       <div class="char-slot teacher-slot">
         <div class="bubble bubble-question" id="bubble-q2">مَا دِينُكَ؟</div>
-        <button class="character teacher" type="button" aria-expanded="false" aria-controls="bubble-q2" data-partner="2-student">
+        <button class="character teacher" type="button" aria-expanded="false" aria-controls="bubble-q2" data-partner="2-student" disabled>
           <span class="char-avatar" aria-hidden="true">
             <img class="char-photo" src="assets/teacher_standby.png" data-standby="assets/teacher_standby.png" data-active="assets/teacher_asking.png" alt="">
           </span>
@@ -82,7 +82,7 @@
 
       <div class="char-slot student-slot">
         <div class="bubble bubble-answer" id="bubble-a2">دِينِي الإِسْلَامُ</div>
-        <button class="character student" type="button" aria-expanded="false" aria-controls="bubble-a2" id="2-student">
+        <button class="character student" type="button" aria-expanded="false" aria-controls="bubble-a2" id="2-student" disabled>
           <span class="char-avatar" aria-hidden="true">
             <img class="char-photo" src="assets/student_listening.png" data-standby="assets/student_listening.png" data-active="assets/student_answering.png" alt="">
           </span>
@@ -94,7 +94,7 @@
     <section class="dialogue-row" data-row="3">
       <div class="char-slot teacher-slot">
         <div class="bubble bubble-question" id="bubble-q3">مَنْ نَبِيُّكَ؟</div>
-        <button class="character teacher" type="button" aria-expanded="false" aria-controls="bubble-q3" data-partner="3-student">
+        <button class="character teacher" type="button" aria-expanded="false" aria-controls="bubble-q3" data-partner="3-student" disabled>
           <span class="char-avatar" aria-hidden="true">
             <img class="char-photo" src="assets/teacher_standby.png" data-standby="assets/teacher_standby.png" data-active="assets/teacher_asking.png" alt="">
           </span>
@@ -104,7 +104,7 @@
 
       <div class="char-slot student-slot">
         <div class="bubble bubble-answer" id="bubble-a3">نَبِيِّي مُحَمَّدٌ ﷺ</div>
-        <button class="character student" type="button" aria-expanded="false" aria-controls="bubble-a3" id="3-student">
+        <button class="character student" type="button" aria-expanded="false" aria-controls="bubble-a3" id="3-student" disabled>
           <span class="char-avatar" aria-hidden="true">
             <img class="char-photo" src="assets/student_listening.png" data-standby="assets/student_listening.png" data-active="assets/student_answering.png" alt="">
           </span>

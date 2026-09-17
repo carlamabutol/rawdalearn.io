@@ -162,6 +162,19 @@ body {
   outline: 3px solid var(--gold);
   outline-offset: 3px;
 }
+.character:disabled {
+  cursor: not-allowed;
+  opacity: .4;
+  filter: grayscale(.5);
+}
+.character:disabled:hover { transform: none; }
+
+.dialogue-row {
+  transition: opacity .3s ease;
+}
+.dialogue-row:not(.active-row) .character:disabled {
+  opacity: .3;
+}
 
 .char-avatar {
   width: 148px;
