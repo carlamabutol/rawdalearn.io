@@ -270,9 +270,46 @@ body {
   100% { transform: translate(-50%, 0) scale(1); }
 }
 
+/* ---------- completion panel ---------- */
+.completion-panel {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  animation: completionIn .4s ease;
+}
+.completion-panel[hidden] { display: none; }
+@keyframes completionIn {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.completion-message {
+  margin: 0;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--teal-dark);
+}
+.review-btn {
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  background: var(--teal);
+  border: none;
+  border-radius: 30px;
+  padding: 12px 28px;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(15, 111, 104, .3);
+  transition: transform .15s ease, background .15s ease;
+}
+.review-btn:hover { background: var(--teal-dark); transform: translateY(-2px); }
+.review-btn:active { transform: scale(.96); }
+
 /* ---------- summary banner ---------- */
 .summary-banner {
-  margin-top: 30px;
+  margin-top: 0;
   background: linear-gradient(135deg, var(--terracotta), var(--terracotta-dark));
   color: #fff;
   border-radius: 40px;
@@ -335,15 +372,35 @@ body {
 }
 
 /* ---------- responsive ---------- */
+/* Stays a two-column teacher/student grid at every width; only the
+   photo size, bubble width and type scale shrink to fit the frame. */
 @media (max-width: 640px) {
-  .dialogue-row { flex-direction: column; gap: 56px; }
-  .char-slot { flex: 1 1 auto; }
-  .bubble { max-width: 78vw; }
-  .title-bar { min-height: auto; }
-  .lesson-title { font-size: 17px; }
+  .page { padding: 16px 14px 26px; }
+  .lesson-header { gap: 10px; }
+  .qr-box { flex: 0 0 96px; padding: 6px 4px; }
+  .qr-label { font-size: 9px; }
+  .qr-url { font-size: 8px; }
+  .title-bar { min-height: auto; padding: 10px 14px; gap: 10px; }
+  .lesson-number { width: 34px; height: 34px; font-size: 16px; }
+  .lesson-tag { font-size: 12px; }
+  .lesson-title { font-size: 15px; }
+  .instructions { font-size: 13px; margin: 14px 0 4px; }
+
+  .dialogue-list { margin-top: 52px; gap: 36px; }
+  .dialogue-row { gap: 8px; padding: 6px 2px; }
+  .char-slot { flex: 1 1 50%; min-width: 0; }
+  .char-avatar { width: 96px; height: 96px; }
+  .char-label { font-size: 11px; }
+
+  .bubble { max-width: 42vw; min-width: 100px; font-size: 13px; padding: 8px 10px; }
+
+  .completion-message { font-size: 18px; }
+  .summary-banner { padding: 14px 18px; border-radius: 26px; }
+  .summary-banner p { font-size: 14px; }
 }
 
 @media (max-width: 380px) {
-  .char-avatar { width: 118px; height: 118px; }
-  .page { padding: 16px 12px 26px; }
+  .char-avatar { width: 78px; height: 78px; }
+  .bubble { max-width: 40vw; font-size: 12px; padding: 6px 8px; }
+  .page { padding: 14px 10px 22px; }
 }
