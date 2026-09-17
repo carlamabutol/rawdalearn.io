@@ -2,22 +2,28 @@
   "use strict";
 
   const characters = Array.from(document.querySelectorAll(".character"));
+  const teachers = characters.filter((c) => c.classList.contains("teacher"));
+  const students = characters.filter((c) => c.classList.contains("student"));
   const confettiLayer = document.getElementById("confettiLayer");
 
+  function setPhoto(button, active) {
+    const photo = button.querySelector(".char-photo");
+    if (!photo) return;
+    photo.src = active ? photo.dataset.active : photo.dataset.standby;
+  }
+
   function closeBubble(button) {
-    const bubbleId = button.getAttribute("aria-controls");
-    const bubble = document.getElementById(bubbleId);
-    if (!bubble) return;
-    bubble.classList.remove("show");
+    const bubble = document.getElementById(button.getAttribute("aria-controls"));
+    if (bubble) bubble.classList.remove("show");
     button.setAttribute("aria-expanded", "false");
+    setPhoto(button, false);
   }
 
   function openBubble(button) {
-    const bubbleId = button.getAttribute("aria-controls");
-    const bubble = document.getElementById(bubbleId);
-    if (!bubble) return;
-    bubble.classList.add("show");
+    const bubble = document.getElementById(button.getAttribute("aria-controls"));
+    if (bubble) bubble.classList.add("show");
     button.setAttribute("aria-expanded", "true");
+    setPhoto(button, true);
   }
 
   function isOpen(button) {
@@ -25,22 +31,29 @@
   }
 
   function toggleCharacter(button) {
+    const group = button.classList.contains("teacher") ? teachers : students;
     const wasOpen = isOpen(button);
+
+    // only one teacher (and, separately, one student) is ever mid-turn at a time
+    group.forEach((other) => {
+      if (other !== button) closeBubble(other);
+    });
+
     if (wasOpen) {
       closeBubble(button);
-    } else {
-      openBubble(button);
-      button.classList.remove("pulse");
+      return;
+    }
 
-      if (button.classList.contains("teacher")) {
-        const partnerId = button.getAttribute("data-partner");
-        const partner = partnerId ? document.getElementById(partnerId) : null;
-        if (partner) partner.classList.add("pulse");
-      }
+    openBubble(button);
 
-      if (button.classList.contains("student")) {
-        celebrate(button);
-      }
+    if (button.classList.contains("teacher")) {
+      const partnerId = button.getAttribute("data-partner");
+      const partner = partnerId ? document.getElementById(partnerId) : null;
+      if (partner) partner.classList.remove("pulse");
+    }
+
+    if (button.classList.contains("student")) {
+      celebrate(button);
     }
   }
 
